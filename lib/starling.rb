@@ -134,12 +134,8 @@ class Starling < MemCache
     raise MemCacheError, "No servers available" if @servers.empty?
     return @force_server if @force_server
 
-    bukkits = @buckets.dup
-    bukkits.nitems.times do |try|
-      n = rand(bukkits.nitems)
-      server = bukkits[n]
+    @servers.each do |server|
       return server if server.alive?
-      bukkits.delete_at(n)
     end
 
     raise MemCacheError, "No servers available (all dead)"
